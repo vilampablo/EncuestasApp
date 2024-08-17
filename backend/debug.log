@@ -9993,3 +9993,5 @@ File /Users/pablovillarreal/Documents/EncuestasApp/venv/lib/python3.12/site-pack
 File /Users/pablovillarreal/Documents/EncuestasApp/venv/lib/python3.12/site-packages/jwt/exceptions.py first seen with mtime 1722531573.0571032
 File /Users/pablovillarreal/Documents/EncuestasApp/venv/lib/python3.12/site-packages/jwt/algorithms.py first seen with mtime 1722531573.0565457
 "GET /api/bot_thread/ HTTP/1.1" 200 2
+"OPTIONS /api/bot_thread/ HTTP/1.1" 200 0
+"GET /api/bot_thread/ HTTP/1.1" 200 2
