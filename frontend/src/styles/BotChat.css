@@ -1,33 +1,47 @@
-.note-container {
-    padding: 10px;
-    margin: 20px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .note-title {
-    color: #333;
-  }
-  
-  .note-content {
-    color: #666;
-  }
-  
-  .note-date {
-    color: #999;
-    font-size: 0.8rem;
-  }
-  
-  .delete-button {
-    background-color: #f44336; /* Red */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .delete-button:hover {
-    background-color: #d32f2f; /* Darker red */
-  }
+/* Container for the chat messages */
+.chat-box {
+  display: flex;
+  flex-direction: column; /* Stack messages vertically */
+  gap: 10px; /* Add space between messages */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Basic message styling */
+.message {
+  padding: 10px 15px;
+  border-radius: 15px;
+  max-width: 75%;
+  color: white;
+  word-wrap: break-word;
+  word-break: break-all; /* Force break at any character if necessary */
+  hyphens: auto; /* Optional: adds hyphens when breaking words */
+  overflow-wrap: break-word; /* Break long words if necessary */
+}
+
+.message-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 50%;
+  align-self: center;
+  padding-top: 100px;
+}
+
+/* User message: aligned to the right */
+.user-message {
+  background-color: #007bff; /* Blue background for user messages */
+  align-self: flex-end; /* Aligns the message to the right */
+  text-align: right; /* Aligns text inside the rectangle to the right */
+}
+
+/* Bot message: aligned to the left */
+.bot-message {
+  align-self: flex-start; /* Aligns the message to the left */
+  text-align: left; /* Aligns text inside the rectangle to the left */
+  color: black;
+  font-size: large;
+}
+
+.chat-title {
+  text-align: center;
+}

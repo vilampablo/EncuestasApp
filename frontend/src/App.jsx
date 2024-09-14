@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
+import SharedFormPage from './pages/SharedFormPage'
 
 function Logout() {
   localStorage.clear()
@@ -26,6 +27,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<RegisterAndLogout />} />
+          <Route path="/sharedForm/:formReference" element={<SharedFormPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

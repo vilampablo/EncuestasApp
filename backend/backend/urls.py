@@ -16,8 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.views import CreateUserView, BotThreadView, UserThreadView
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView 
+from api.views import CreateUserView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf.urls import include
 
 urlpatterns = [
@@ -26,7 +26,5 @@ urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh_token"),
     path("api-auth/", include("rest_framework.urls")),
-    path("api/create_bot_thread/", BotThreadView.as_view(), name="create_bot_thread"),
-    path("api/user_chat_thread/", UserThreadView.as_view(), name="user_chat_thread"),
     path("api/", include("api.urls")),
 ]

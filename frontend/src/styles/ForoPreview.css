@@ -1,0 +1,66 @@
+.foro-preview {
+  resize: horizontal;
+  min-width: 35%;
+  max-width: 50%;
+  background-color: #f9f9f9;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.question {
+  margin-bottom: 10px;
+  border-radius: 7px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-left: #5416ff 5px solid;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px 30px;
+  padding: 20px;
+}
+
+.title { 
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 20px;
+}
+
+.title-editing {
+  align-items: center;
+  padding: 10px;
+  margin: 40px 20px;
+}
+
+.title, h2, .title-input {
+  font-size: x-large; /* Same as the h2 font size */
+  font-weight: bold; /* Make sure the font weight is similar */
+}
+
+.title-input {
+  outline: none;
+  background-color: transparent;
+  width: auto;
+  border: none;
+}
+
+.title-edit-button {
+  margin-left: 10px;
+  padding: 0;
+  font-size: x-large;
+  background-color: transparent;
+  margin: 20px;
+  border: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin: 0px;
+  margin-top: 10px
+}
+
+.form-share-buttons {
+  z-index: 1;
+  position: relative;
+}

@@ -1,0 +1,62 @@
+
+
+.SharedFormPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f5f5f5;
+    width: 100%;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.shared-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 30%;
+    max-width: 95%;
+}
+
+.shared-form-header {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.shared-form-title {
+    font-size: xx-large;   
+    font-weight: bold;
+}
+
+.shared-form-question {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 20px;
+    color: rgb(94, 94, 94);
+    font-weight: bold;
+}
+
+.shared-form-input {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0%;
+    width: 80%;
+}
+
+.shared-form-input:focus {
+    outline: none;
+    border-bottom: 2px solid #5416ff;
+}
