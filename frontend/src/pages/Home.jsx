@@ -5,7 +5,7 @@ import ForoPreview from '../components/ForoPreview';
 import Sidebar from '../components/SideBar';
 import { FaArrowUp } from "react-icons/fa";
 
-import { createOpenAIThread, checkRunCompletion } from '../utils/OpenAi'; // Importing the createOpenAIThread function
+import { createOpenAIThread, checkRunCompletion } from '../utils/OpenAi';
 
 import '../styles/Home.css';
 

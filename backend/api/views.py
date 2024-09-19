@@ -193,10 +193,33 @@ class UpdateSharedFormView(APIView):
 
 class CreateFormView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         data = request.data
+        bot_thread_id = data.get('bot_thread')
+
+        # Check if bot_thread_id exists in the request
+        if not bot_thread_id:
+            return Response(
+                {"error": "bot_thread_id is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Check if a form with the same bot_thread_id already exists
+        existing_form = Forms.objects.filter(bot_thread_id=bot_thread_id).first()
+        if existing_form:
+            return Response(
+                {
+                    "error": f"A form with bot_thread_id {bot_thread_id} already exists.",
+                    "id": existing_form.id  # Return the existing form's ID
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Proceed with the form creation if no conflict
         serializer = FormsSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

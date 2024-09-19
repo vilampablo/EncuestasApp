@@ -93,22 +93,28 @@ const ForoPreview = ({ threadId, formUpdated }) => {
         setShareModalOpen(true);
     
         const newSharedForm = {
-            bot_thread: threadId,
+            bot_thread: threadId,  // Use threadId passed as a prop
             shared_form: formData
         };
     
         api.post(`/api/forms/create/`, newSharedForm)
             .then((response) => {
                 if (response.status === 201) {
-                    setShareableThreadId(response.data.bot_thread);
+                    setShareableThreadId(response.data.id);
                     console.log("Shared form created successfully:", response.data);
                 }
             })
             .catch((err) => {
-                console.error("Failed to create shared form.", err);
-                setApiError("Failed to create shared form. Please try again.");
+                // Check if the error response contains the existing form's ID
+                if (err.response && err.response.data && err.response.data.id) {
+                    setShareableThreadId(err.response.data.id);
+                    console.log("Form already exists. Using existing form ID:", err.response.data.id);
+                } else {
+                    console.error("Failed to create shared form.", err);
+                    setApiError("Failed to create shared form. Please try again.");
+                }
             });
-    };
+    };    
 
     if (loading) {
         return <div>Loading form...</div>;

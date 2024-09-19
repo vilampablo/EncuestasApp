@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Login from './pages/Login'
+import LoginByForm from './pages/LoginByForm'
 import Register from './pages/Register'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
@@ -25,6 +26,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/login" element={<Login />} />
+          <Route path="/loginByForm/:formReference" element={<LoginByForm />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<RegisterAndLogout />} />
           <Route path="/sharedForm/:formReference" element={<SharedFormPage />} />

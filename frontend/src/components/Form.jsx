@@ -8,33 +8,34 @@ import LoadingIndicator from "./LoadingIndicator";
 
 const DEVELOPER_CODE = "a123"; // Set your desired developer code
 
-function Form({ route, method }) {
-    const [username, setUsername] = useState("");
+function Form({ route, method, reference }) {
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [developerCode, setDeveloperCode] = useState(""); // State for developer code
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const name = method === "login" ? "Login" : "Register";
+    const name = method === "login" ? "Login" : method === "loginByForm" ? "Log In" : "Register";
 
     const handleSubmit = async (e) => {
         setLoading(true);
         e.preventDefault();
 
-        // If registering, check for the correct developer code
-        if (method !== "login" && developerCode !== DEVELOPER_CODE) {
+        if (method !== "login" && method !== "loginByForm" && developerCode !== DEVELOPER_CODE) {
             alert("Invalid developer code");
             setLoading(false);
             return;
         }
 
         try {
-            const res = await api.post(route, { username, password });
+            const res = await api.post(route, { email, password });
             if (method === "login") {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 navigate("/");
-            } else {
+            } else if (method === "loginByForm") {
+                navigate(`/sharedForm/${reference}`);
+            } else{
                 navigate("/login");
             }
         } catch (error) {
@@ -54,9 +55,9 @@ function Form({ route, method }) {
                 <input
                     className="form-input"
                     type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Username*"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email*"
                     required
                 />
                 <input
@@ -67,7 +68,7 @@ function Form({ route, method }) {
                     placeholder="Password*"
                     required
                 />
-                {method !== "login" && (
+                {method !== "login" && method !== "loginByForm" && (
                     <input
                         className="form-input"
                         type="text"
@@ -80,7 +81,7 @@ function Form({ route, method }) {
                 {loading && <LoadingIndicator />}
                 <button className="form-button" type="submit">{name}</button>
 
-                {method === "login" ? (
+                {method === "login" || method === "loginByForm" ? (
                     <p>
                         Not Registered?{" "}
                         <Link to="/register" className="light-blue-link">
