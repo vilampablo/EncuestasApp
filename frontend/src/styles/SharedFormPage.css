@@ -28,20 +28,27 @@
 .shared-form-title {
     font-size: xx-large;   
     font-weight: bold;
-    padding-bottom: 20px;
     border-bottom: 1px solid #ccc;
     padding: 0px 20px 10px;
+    margin-bottom: 0px;
 }
 
 .sign-in-message {
-    font-size: large;
+    font-size: medium;
     padding-left: 20px;
     width: 100%;
+    color: rgb(94, 94, 94);
 }
 
 .signin-link {
-    color: #1aa37f;;
+    color: #5416ff;;
     text-decoration: none;
+}
+
+.switch-account-link {
+    color: #5416ff;
+    text-decoration: none;
+    padding-left: 10px;
 }
 
 .shared-form-question-container {

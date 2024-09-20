@@ -28,12 +28,20 @@ function Form({ route, method, reference }) {
         }
 
         try {
-            const res = await api.post(route, { email, password });
+            const res = await api.post(route, { 
+                email, 
+                password, 
+                username: '',
+                first_name: '',
+                last_name: ''
+            });
             if (method === "login") {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 navigate("/");
             } else if (method === "loginByForm") {
+                localStorage.setItem(ACCESS_TOKEN, res.data.access);
+                localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 navigate(`/sharedForm/${reference}`);
             } else{
                 navigate("/login");

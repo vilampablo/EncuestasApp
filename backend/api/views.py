@@ -1,22 +1,26 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import BotThread, BotThreadContent, Forms
-from .serializers import BotThreadSerializer, BotThreadContentSerializer, FormsSerializer
+from .models import BotThread, BotThreadContent, Forms, CustomUser
+from .serializers import BotThreadSerializer, BotThreadContentSerializer, FormsSerializer, CustomUserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
 # Create your views here.
 
-
-class CreateUserView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class UserCreateView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
     permission_classes = [AllowAny]
 
+class GetEmailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = self.request.user
+        return Response({"email": user.email})
 
 class BotThreadView(generics.ListAPIView):
     queryset = BotThread.objects.all()

@@ -1,32 +1,19 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import BotThread, BotThreadContent, Forms, UserProfile
+from .models import BotThread, BotThreadContent, Forms, CustomUser
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
-        fields = ["email", "first_name", "last_name"]
+        model = CustomUser
+        fields = ['id', 'email', 'username', 'first_name', 'last_name', 'password']
         extra_kwargs = {
-            'email': {'required': False},
-            'first_name': {'required': False},
-            'last_name': {'required': False},
+            'password': {'write_only': True}
         }
 
-class UserSerializer(serializers.ModelSerializer):
-    profile = UserProfileSerializer(required=False, allow_null=True)
-
-    class Meta:
-        model = User
-        fields = ["id", "username", "password", "profile"]
-        extra_kwargs = {"password": {"write_only": True}}
-
     def create(self, validated_data):
-        profile_data = validated_data.pop('profile', None)
-        user = User.objects.create_user(**validated_data)
-        
-        if profile_data:
-            UserProfile.objects.create(user=user, **profile_data)
-        
+        user = CustomUser(**validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
         return user
 
 class BotThreadSerializer(serializers.ModelSerializer):

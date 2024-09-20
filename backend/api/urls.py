@@ -37,4 +37,7 @@ urlpatterns = [
     path('forms/create/',
         views.CreateFormView.as_view(),
         name='create_form'),
+    path('get_email/',
+        views.GetEmailView.as_view(),
+        name='get_email'),
 ]

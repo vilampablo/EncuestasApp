@@ -1,16 +1,10 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api';
-
 import LoadingIndicator from '../components/LoadingIndicator';
-
 import '../styles/SharedFormPage.css';
-import ProtectedRoute from '../components/ProtectedRoute';
-
-import { jwtDecode } from 'jwt-decode'
-import { ACCESS_TOKEN } from '../constants';
+import { jwtDecode } from 'jwt-decode';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 
 const SharedFormPage = () => {
     const { formReference } = useParams();
@@ -18,23 +12,56 @@ const SharedFormPage = () => {
     const [loading, setLoading] = useState(true);
     const [answers, setAnswers] = useState({});
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [email, setEmail] = useState('');
 
     useEffect(() => {
         checkLoginStatus();
         getFormContent();
     }, []);
 
-    const checkLoginStatus = () => {
-        const token = localStorage.getItem(ACCESS_TOKEN);
-        if (token) {
-            try {
-                const decoded = jwtDecode(token);
-                setIsLoggedIn(!!decoded);
-            } catch (error) {
-                console.error('Invalid token', error);
+    const refreshToken = async () => {
+        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+        try {
+            const res = await api.post('/api/token/refresh/', { refresh: refreshToken });
+            if (res.status === 200) {
+                localStorage.setItem(ACCESS_TOKEN, res.data.access);
+                setIsLoggedIn(true);
+            } else {
                 setIsLoggedIn(false);
             }
-        } else {
+        } catch (error) {
+            console.error('Failed to refresh token', error);
+            setIsLoggedIn(false);
+        }
+    };
+
+    const checkLoginStatus = async () => {
+        const token = localStorage.getItem(ACCESS_TOKEN);
+        if (!token) {
+            setIsLoggedIn(false);
+            return;
+        }
+
+        try {
+            const decoded = jwtDecode(token);
+            const tokenExpiration = decoded.exp;
+            const now = Date.now() / 1000;
+
+            if (tokenExpiration < now) {
+                await refreshToken();
+            } else {
+                setIsLoggedIn(true);
+                api.get(`/api/get_email/`)
+                    .then((res) => {
+                        setEmail(res.data.email);
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        setIsLoggedIn(false);
+                    });
+            }
+        } catch (error) {
+            console.error('Invalid token', error);
             setIsLoggedIn(false);
         }
     };
@@ -57,7 +84,7 @@ const SharedFormPage = () => {
             ...prevAnswers,
             [questionId]: value,
         }));
-    
+
         const textarea = document.querySelector(`textarea[name='question-${questionId}']`);
         if (textarea) {
             textarea.style.height = 'auto';
@@ -72,7 +99,7 @@ const SharedFormPage = () => {
     const handleClear = (questionId) => {
         setAnswers((prevAnswers) => ({
             ...prevAnswers,
-            [questionId]: '', 
+            [questionId]: '',
         }));
     };
 
@@ -92,6 +119,12 @@ const SharedFormPage = () => {
             });
     };
 
+    const handleSwitchAccount = () => {
+        localStorage.removeItem(ACCESS_TOKEN);
+        localStorage.removeItem(REFRESH_TOKEN);
+        window.location.reload();
+    };
+
     if (loading) return <LoadingIndicator />;
 
     return (
@@ -101,9 +134,10 @@ const SharedFormPage = () => {
                     <h1 className='shared-form-title'>{formContent.shared_form.title}</h1>
                     {!isLoggedIn && (
                         <p className="sign-in-message">
-                            <Link to={`/loginByForm/${formReference}`} className="signin-link">Acceder a foroforo</Link> para guardar información
+                            <Link to={`/loginByForm/${formReference}`} className="signin-link">Sign in</Link> to save your progress
                         </p>
                     )}
+                    {isLoggedIn && <p className='sign-in-message'>{email}<Link to={`/loginByForm/${formReference}`} className="switch-account-link" onClick={handleSwitchAccount}>Switch account</Link></p>}
                 </div>
                 <form onSubmit={handleSubmit}>
                     {formContent.shared_form.questions.map((question, index) => (
@@ -173,7 +207,6 @@ const SharedFormPage = () => {
                     ))}
                     <div className='shared-form-submit-container'>
                         <button type='submit' className='shared-form-submit-button'>Submit</button>
-                        {/* Use onClick for the reset button to clear all answers */}
                         <button type='button' onClick={handleReset} className='shared-form-reset-button'>
                             Clear form
                         </button>
@@ -185,6 +218,3 @@ const SharedFormPage = () => {
 };
 
 export default SharedFormPage;
-
-
-
