@@ -1,3 +1,5 @@
+
+
 .SharedFormPage {
     display: flex;
     flex-direction: column;
@@ -87,7 +89,6 @@
     background-position: center bottom;
     background-repeat: no-repeat;
     transition: background-size 0.4s ease;
-    /* Ensure proper display */
     display: block;
 }
 
@@ -211,3 +212,4 @@
     cursor: pointer;
     margin-left: auto;
 }
+

@@ -8,6 +8,7 @@ import { FaArrowUp } from "react-icons/fa";
 import { createOpenAIThread, checkRunCompletion } from '../utils/OpenAi';
 
 import '../styles/Home.css';
+import '../styles/SideBar.css';
 
 function Home() {
     const [BotThreads, setBotThreads] = useState([]);

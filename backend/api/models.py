@@ -65,3 +65,28 @@ class Forms(models.Model):
 
     def __str__(self):
         return self.form_title
+
+class FormResponses(models.Model):
+    form = models.ForeignKey(Forms, on_delete=models.CASCADE, related_name='responses')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.form.form_title
+
+class FormAnswers(models.Model):
+    form_response = models.ForeignKey(FormResponses, on_delete=models.CASCADE, related_name='answers')
+    question = models.CharField(max_length=255)
+    answer = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.question
+
+class FormAnalytics(models.Model):
+    form = models.OneToOneField(Forms, on_delete=models.CASCADE, related_name='analytics')
+    total_submissions = models.IntegerField(default=0)
+    total_answers = models.IntegerField(default=0)
+    insights = models.JSONField(default=dict)
+
+    def __str__(self):
+        return self.form.form_title

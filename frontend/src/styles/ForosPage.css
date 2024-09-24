@@ -1,0 +1,29 @@
+.foros-page {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+.foros-title {
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.foros-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 100px 40px 40px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.foro-grid-item {
+    background-color: gray;
+    height: 300px;
+    width: 200px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;
+    border-radius: 15px;
+}

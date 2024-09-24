@@ -1,0 +1,76 @@
+/* Sidebar container for chat list */
+.sidebar {
+    background-color: #f9f9f9; /* Example color, adjust as needed */
+    height: 100%;
+    width: 13%;
+    padding: 10px;
+    box-sizing: border-box;
+    height: 100%;
+  }
+
+  .new-thread-button {
+    background-color: transparent; /* Example color, adjust as needed */
+    color: rgb(133, 133, 133);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 40px;
+    margin-left: auto;
+  }
+  
+  .new-thread-button:hover {
+    background-color: rgb(235, 235, 235); /* Example color, adjust as needed */
+  }
+  
+  .new-thread-button:disabled {
+    cursor: default; /* Remove pointer cursor to indicate it's not clickable */
+    color: transparent;
+  }
+  
+  .new-thread-button:disabled:hover {
+    background-color: transparent;
+  }
+  
+  /* List of chat threads */
+  .threads-list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Individual thread item now as a button */
+  .thread-item {
+    padding: 10px;
+    background-color: transparent; /* Example color, adjust as needed */
+    margin-bottom: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    border: none; /* Remove default button border */
+    cursor: pointer; /* Add pointer cursor */
+    display: block;
+    width: 100%; /* Ensure the button takes up the full width */
+    text-align: left; /* Align text to the left */
+    font-size: larger;
+    color: inherit; /* Inherit font color */
+    text-decoration: none;
+  }
+  
+  .thread-item:hover,
+  .thread-item:disabled { /* Apply hover effect and selected state styling */
+    background-color: rgb(235, 235, 235); /* Example color, adjust as needed */
+    color: inherit; /* Ensure font color does not change */
+  }
+  
+  .thread-item:disabled {
+    cursor: default; /* Remove pointer cursor to indicate it's not clickable */
+    pointer-events: none; /* Disable click events */
+  }
+  
+  .thread-item:disabled:hover {
+    background-color: rgb(235, 235, 235); /* Keep the hover effect even when disabled */
+    color: inherit; /* Ensure font color does not change on hover */
+  }

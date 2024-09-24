@@ -1,5 +1,6 @@
 import { IoIosAdd } from "react-icons/io";
 import '../styles/Home.css';
+import { Link } from 'react-router-dom';
 
 function SideBar({ BotThreads, selectedThread, handleThreadClick, createNewThread, isThreadEmpty }) {
 
@@ -13,9 +14,9 @@ function SideBar({ BotThreads, selectedThread, handleThreadClick, createNewThrea
                 <IoIosAdd />
             </button>
 
-            <button className="thread-item" style={{ marginBottom: "50px", marginTop: "20px" }}>
+            <Link to="/foros" className="thread-item" style={{ marginBottom: "50px", marginTop: "20px" }} >
                 Foros
-            </button>
+            </Link>
 
             <div className="threads-list">
                 {BotThreads.map((thread) => (

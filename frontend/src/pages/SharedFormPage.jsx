@@ -109,15 +109,27 @@ const SharedFormPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        api.post(`/api/forms/${formReference}/submit/`, { answers })
-            .then(() => {
-                alert("Form submitted successfully!");
-            })
-            .catch((err) => {
-                console.error(err);
-                alert("Error submitting form. Please try again.");
-            });
-    };
+    
+        // Prepare the answers array for submission
+        const formattedAnswers = formContent.shared_form.questions.map((question, index) => ({
+            question: question.question_text,
+            answer: answers[index] || '',  // If no answer, use an empty string
+        }));
+    
+        // Call the API to submit the form answers along with the form reference
+        api.post(`/api/form-answers/`, {
+            form_reference: formReference,  // Send form reference instead of form_response
+            answers: formattedAnswers      // Send all answers in an array
+        })
+        .then((res) => {
+            console.log('Form submitted successfully:', res.data);
+            alert("Form submitted successfully!");
+        })
+        .catch((err) => {
+            console.error('Error submitting form:', err);
+            alert("Failed to submit form. Please try again.");
+        });
+    };    
 
     const handleSwitchAccount = () => {
         localStorage.removeItem(ACCESS_TOKEN);
@@ -156,22 +168,24 @@ const SharedFormPage = () => {
                                 {question.type === 'multiple_choice' && (
                                     <div className='multiple-choice-options'>
                                         {question.choices.map((choice, choiceIndex) => (
-                                            <div key={choiceIndex} className='choice-option'>
-                                                <input
-                                                    type='radio'
-                                                    name={`question-${index}`}
-                                                    value={choice}
-                                                    checked={answers[index] === choice}
-                                                    onChange={(e) => handleChange(index, e.target.value)}
-                                                />
-                                                <label>{choice}</label>
+                                            <div key={choiceIndex}>
+                                                <label className='choice-option'>
+                                                    <input
+                                                        type='radio'
+                                                        name={`question-${index}`}
+                                                        value={choice}
+                                                        checked={answers[index] === choice}
+                                                        onChange={(e) => handleChange(index, e.target.value)}
+                                                    />
+                                                    <span>{choice}</span> {/* Use a span for the text */}
+                                                </label>
                                             </div>
                                         ))}
                                     </div>
                                 )}
                                 {question.type === 'binary' && (
                                     <div className='binary-options'>
-                                        <div className='choice-option'>
+                                        <label className='choice-option'>
                                             <input
                                                 type='radio'
                                                 name={`question-${index}`}
@@ -179,9 +193,9 @@ const SharedFormPage = () => {
                                                 checked={answers[index] === 'True'}
                                                 onChange={(e) => handleChange(index, e.target.value)}
                                             />
-                                            <label>True</label>
-                                        </div>
-                                        <div className='choice-option'>
+                                            <span>True</span> {/* Use a span for the text */}
+                                        </label>
+                                        <label className='choice-option'> {/* Make the whole label clickable */}
                                             <input
                                                 type='radio'
                                                 name={`question-${index}`}
@@ -189,8 +203,8 @@ const SharedFormPage = () => {
                                                 checked={answers[index] === 'False'}
                                                 onChange={(e) => handleChange(index, e.target.value)}
                                             />
-                                            <label>False</label>
-                                        </div>
+                                            <span>False</span> {/* Use a span for the text */}
+                                        </label>
                                     </div>
                                 )}
                             </div>

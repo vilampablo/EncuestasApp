@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import FormResponsesViewSet, FormAnswersViewSet, FormAnalyticsViewSet
 
 app_name = "api"
 
@@ -40,4 +41,26 @@ urlpatterns = [
     path('get_email/',
         views.GetEmailView.as_view(),
         name='get_email'),
+
+        
+    path('form-responses/', 
+         FormResponsesViewSet.as_view({'get': 'list', 'post': 'create'}), 
+         name='form_responses'),
+    path('form-responses/<int:pk>/', 
+         FormResponsesViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), 
+         name='form_response'),
+    
+    path('form-answers/', 
+         FormAnswersViewSet.as_view({'get': 'list', 'post': 'create'}), 
+         name='form_answers'),
+    path('form-answers/<int:pk>/', 
+         FormAnswersViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), 
+         name='form_answer'),
+
+    path('form-analytics/', 
+         FormAnalyticsViewSet.as_view({'get': 'list'}), 
+         name='form_analytics'),
+    path('form-analytics/<int:pk>/', 
+         FormAnalyticsViewSet.as_view({'get': 'retrieve'}), 
+         name='form_analytics_by_form'),
 ]

@@ -2,10 +2,10 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import BotThread, BotThreadContent, Forms, CustomUser
-from .serializers import BotThreadSerializer, BotThreadContentSerializer, FormsSerializer, CustomUserSerializer
+from .models import BotThread, BotThreadContent, Forms, CustomUser, FormResponses, FormAnswers, FormAnalytics
+from .serializers import BotThreadSerializer, BotThreadContentSerializer, FormsSerializer, CustomUserSerializer, FormResponsesSerializer, FormAnswersSerializer, FormAnalyticsSerializer
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.views import APIView
 
 # Create your views here.
@@ -184,6 +184,7 @@ class FormDetailView(APIView):
             return Response({'error': 'Form not found'}, status=status.HTTP_404_NOT_FOUND)
 
 class UpdateSharedFormView(APIView):
+    permission_classes = [IsAuthenticated]
     def put(self, request, form_id):
         try:
             form = Forms.objects.get(id=form_id)
@@ -227,3 +228,66 @@ class CreateFormView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class FormResponsesViewSet(viewsets.ModelViewSet):
+    serializer_class = FormResponsesSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Only return form responses that belong to the logged-in user
+        return FormResponses.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        # Automatically associate the user with the form response
+        serializer.save(user=self.request.user)
+
+class FormAnswersViewSet(viewsets.ModelViewSet):
+    queryset = FormAnswers.objects.all()
+    serializer_class = FormAnswersSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        form_response_id = request.data.get('form_response')
+        form_reference = request.data.get('form_reference')  # Ensure you get the form reference if needed
+        answers_data = request.data.get('answers')
+
+        # Step 1: Create the FormResponse if it doesn't exist
+        if not form_response_id:
+            form_response = FormResponses.objects.create(
+                form_id=form_reference,  # You should ensure that the correct form ID is passed here
+                user=request.user
+            )
+            form_response_id = form_response.id
+        else:
+            form_response = FormResponses.objects.get(id=form_response_id)
+
+        # Step 2: Save all answers
+        for answer_data in answers_data:
+            FormAnswers.objects.create(
+                form_response=form_response,
+                question=answer_data['question'],
+                answer=answer_data['answer']
+            )
+
+        # Return a response indicating success
+        return Response({"message": "Form answers submitted successfully"}, status=status.HTTP_201_CREATED)
+
+    def retrieve(self, request, *args, **kwargs):
+        form_response_id = kwargs.get('pk')  # Get the form_response_id from the URL
+
+        # Filter answers by form_response_id
+        answers = FormAnswers.objects.filter(form_response_id=form_response_id)
+
+        # Serialize the answers
+        serializer = self.get_serializer(answers, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class FormAnalyticsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = FormAnalyticsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Only return analytics related to forms the user owns or has access to
+        # Adjust logic if you need a more complex permissions model
+        return FormAnalytics.objects.filter(form__owner=self.request.user)

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import BotThread, BotThreadContent, Forms, CustomUser
+from .models import BotThread, BotThreadContent, Forms, CustomUser, FormResponses, FormAnswers, FormAnalytics
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,3 +48,18 @@ class FormsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Forms
         fields = ['id', 'bot_thread', 'form_title', 'shared_form']
+
+class FormResponsesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FormResponses
+        fields = ['id', 'form', 'user', 'submitted_at']
+
+class FormAnswersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FormAnswers
+        fields = ['id', 'form_response', 'question', 'answer']
+
+class FormAnalyticsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FormAnalytics
+        fields = ['id', 'form', 'total_submissions', 'total_answers', 'insights']
